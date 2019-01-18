@@ -5,7 +5,6 @@ box:
     - 8080
 
 
-
 #Build our application using Maven, just as we always have
 build:
   steps:
