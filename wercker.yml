@@ -25,7 +25,6 @@ push-release:
         working-dir: /pipeline/source
         ports: 8080
         cmd: sh target/bin/start
-        
 
 #Deploy our container from the Oracle Container Registry to the Oracle Container Engine (Kubernetes)
 deploy-to-cluster:
@@ -52,19 +51,12 @@ deploy-to-cluster:
         command: create secret docker-registry wercker --docker-server=$DOCKER_REGISTRY --docker-email=nobody@oracle.com --docker-username=$DOCKER_USERNAME --docker-password='$OCI_AUTH_TOKEN'; echo create registry secret
 
     - script:
-        name: "Visualise twitter feed Kubernetes config"
+        name: "Visualise Kubernetes config"
         code: cat kubernetes.yml
 
     - kubectl:
-        name: deploy twitter-feed to kubernetes
+        name: deploy to kubernetes
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_AUTH_TOKEN
         insecure-skip-tls-verify: true
         command: apply -f kubernetes.yml
-        
-     - kubectl:
-        name: deploy alpha office catalog to kubernetes
-        server: $KUBERNETES_MASTER
-        token: $KUBERNETES_AUTH_TOKEN
-        insecure-skip-tls-verify: true
-        command: apply -f alpha-office-product-catalog.kubernetes.yml
