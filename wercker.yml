@@ -5,7 +5,6 @@ box:
     - 8080
 
 
-
 #Build our application using Maven, just as we always have
 build:
   steps:
@@ -37,7 +36,7 @@ deploy-to-cluster:
         
     steps:
 
-    #- bash-template
+    - bash-template
 
     - kubectl:
         name: delete secret
@@ -54,12 +53,19 @@ deploy-to-cluster:
         command: create secret docker-registry wercker --docker-server=$DOCKER_REGISTRY --docker-email=nobody@oracle.com --docker-username=$DOCKER_USERNAME --docker-password='$OCI_AUTH_TOKEN'; echo create registry secret
 
     - script:
-        name: "Visualise Kubernetes config"
+        name: "Visualise twitter feed Kubernetes config"
         code: cat kubernetes.yml
 
     - kubectl:
-        name: deploy to kubernetes
+        name: deploy twitter-feed to kubernetes
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_AUTH_TOKEN
         insecure-skip-tls-verify: true
-        command: apply -f ./deployment/
+        command: apply -f kubernetes.yml
+        
+     - kubectl:
+        name: deploy alpha office catalog to kubernetes
+        server: $KUBERNETES_MASTER
+        token: $KUBERNETES_AUTH_TOKEN
+        insecure-skip-tls-verify: true
+        command: apply -f alpha-office-product-catalog.kubernetes.yml
